@@ -1,9 +1,9 @@
-// TODO: Include packages needed for this application
+// packages needed for this application
 const inquirer = require("inquirer");
 const fs = require('fs');
 const generateMarkdown = require("./utils/generateMarkdown");
 
-// TODO: Create an array of questions for user input
+// array of questions for user input
 const questions = [
     {
         type: "input",
@@ -58,24 +58,30 @@ const questions = [
         name: "contributing",
     },
 
-
-
-
-
-
-
-
-
-
 ];
 
-inquirer
-    .prompt(questions);
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
 
-// TODO: Create a function to initialize app
-function init() {}
 
-// Function call to initialize app
+// function to write README file
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, err => {
+        err ? console.log(err) : console.log("File written.")
+    });
+}
+
+// function to initialize app
+function init() {
+    const dir = './output';
+
+    // initialize directory
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+
+    inquirer.prompt(questions).then(answers => {
+        writeToFile(dir + "/README.md", generateMarkdown(answers));
+    });
+}
+
+// function call to initialize app
 init();
